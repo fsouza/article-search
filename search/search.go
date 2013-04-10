@@ -30,7 +30,7 @@ func NewStore(files ...string) (*Store, error) {
 		scanner.Split(bufio.ScanWords)
 		for scanner.Scan() {
 			t := scanner.Text()
-			t = strings.Trim(t, ".?!-,;:")
+			t = strings.Trim(t, `.?!-,;:"`)
 			l := s.index[t]
 			if n := sort.SearchStrings(l, name); n == len(l) {
 				l = append(l, name)
