@@ -6,6 +6,7 @@ package search
 
 import (
 	"reflect"
+	"sort"
 	"testing"
 )
 
@@ -33,5 +34,38 @@ func TestNewStoreUnknownFile(t *testing.T) {
 	_, err := NewStore("testdata/good", "testdata/bad")
 	if err == nil {
 		t.Errorf("NewStore. Want non-nil error, got <nil>.")
+	}
+}
+
+func TestSearch(t *testing.T) {
+	files := []string{
+		"testdata/good", "testdata/headoverfeet", "testdata/ironic",
+		"testdata/kingofpain", "testdata/pressure", "testdata/thankyou",
+	}
+	st, err := NewStore(files...)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var tests = []struct {
+		input string
+		want  []string
+	}{
+		{"good", []string{"testdata/good", "testdata/ironic", "testdata/thankyou"}},
+		{"ironic", []string{"testdata/ironic"}},
+		{"ironic | gained", []string{"testdata/good", "testdata/ironic"}},
+		{"good & down", []string{"testdata/good", "testdata/ironic", "testdata/thankyou"}},
+		{"good & down & ironic", []string{"testdata/ironic"}},
+		{"secret", nil},
+		{"", nil},
+	}
+	for _, tt := range tests {
+		got, err := st.Search(tt.input)
+		sort.Strings(got)
+		if !reflect.DeepEqual(got, tt.want) {
+			t.Errorf("Search(%q): Want %v. Got %v.", tt.input, tt.want, got)
+		}
+		if tt.want == nil && err == nil {
+			t.Errorf("Expected non-nil error, got <nil>.")
+		}
 	}
 }
