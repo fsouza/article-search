@@ -14,12 +14,12 @@ import (
 
 var noArticleErr = errors.New("No articles found.")
 
-type Store struct {
+type Index struct {
 	index map[string][]string
 }
 
-func NewStore(files ...string) (*Store, error) {
-	s := Store{
+func NewIndex(files ...string) (*Index, error) {
+	s := Index{
 		index: make(map[string][]string),
 	}
 	sort.Strings(files)
@@ -44,7 +44,7 @@ func NewStore(files ...string) (*Store, error) {
 	return &s, nil
 }
 
-func (s *Store) search(word string) ([]string, error) {
+func (s *Index) search(word string) ([]string, error) {
 	r, ok := s.index[word]
 	if !ok {
 		return nil, noArticleErr
@@ -52,7 +52,7 @@ func (s *Store) search(word string) ([]string, error) {
 	return r, nil
 }
 
-func (s *Store) or(queries ...string) ([]string, error) {
+func (s *Index) or(queries ...string) ([]string, error) {
 	var result []string
 	for _, q := range queries {
 		q = strings.TrimSpace(q)
@@ -65,7 +65,7 @@ func (s *Store) or(queries ...string) ([]string, error) {
 	return result, nil
 }
 
-func (s *Store) and(queries ...string) ([]string, error) {
+func (s *Index) and(queries ...string) ([]string, error) {
 	var articles []string
 	for _, q := range queries {
 		q = strings.TrimSpace(q)
@@ -92,7 +92,7 @@ func (s *Store) and(queries ...string) ([]string, error) {
 	return articles, nil
 }
 
-func (s *Store) Search(query string) ([]string, error) {
+func (s *Index) Search(query string) ([]string, error) {
 	parts := strings.Split(query, "&")
 	if len(parts) > 1 {
 		return s.and(parts...)
