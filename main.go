@@ -14,7 +14,7 @@ import (
 
 func main() {
 	var query string
-	store, err := search.NewStore(os.Args[1:]...)
+	store, err := search.NewIndex(os.Args[1:]...)
 	if err != nil {
 		log.Fatal(err)
 	}
