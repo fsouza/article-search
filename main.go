@@ -7,6 +7,7 @@ package main
 import (
 	"fmt"
 	"github.com/fsouza/article-search/search"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -20,7 +21,10 @@ func main() {
 	}
 	for {
 		fmt.Print("Search for: ")
-		fmt.Scanf("%s", &query)
+		_, err := fmt.Scanf("%s", &query)
+		if err == io.EOF {
+			break
+		}
 		articles, err := store.Search(query)
 		if err != nil {
 			fmt.Println(err)
