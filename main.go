@@ -30,6 +30,6 @@ func main() {
 			fmt.Println(err)
 			continue
 		}
-		fmt.Printf("Matching articles: %s.\n", strings.Join(articles, ", "))
+		fmt.Printf("%s.\n", strings.Join(articles, ", "))
 	}
 }
