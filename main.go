@@ -20,7 +20,7 @@ func main() {
 		log.Fatal(err)
 	}
 	for {
-		fmt.Print("Search for: ")
+		fmt.Print("> ")
 		_, err := fmt.Scanf("%s", &query)
 		if err == io.EOF {
 			break
