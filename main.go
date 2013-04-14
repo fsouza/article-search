@@ -5,31 +5,29 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/fsouza/article-search/search"
-	"io"
 	"log"
 	"os"
 	"strings"
 )
 
 func main() {
-	var query string
 	store, err := search.NewIndex(os.Args[1:]...)
 	if err != nil {
 		log.Fatal(err)
 	}
-	for {
-		fmt.Print("> ")
-		_, err := fmt.Scanf("%s", &query)
-		if err == io.EOF {
-			break
-		}
-		articles, err := store.Search(query)
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Split(bufio.ScanLines)
+	fmt.Print("> ")
+	for scanner.Scan() {
+		articles, err := store.Search(scanner.Text())
 		if err != nil {
 			fmt.Println(err)
-			continue
+		} else {
+			fmt.Printf("%s.\n", strings.Join(articles, ", "))
 		}
-		fmt.Printf("%s.\n", strings.Join(articles, ", "))
+		fmt.Print("> ")
 	}
 }
