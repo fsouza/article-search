@@ -54,6 +54,8 @@ func TestSearch(t *testing.T) {
 		{"ironic", []string{"testdata/ironic"}},
 		{"ironic | gained", []string{"testdata/good", "testdata/ironic"}},
 		{"good & down", []string{"testdata/good", "testdata/ironic", "testdata/thankyou"}},
+		{" good & down   \n", []string{"testdata/good", "testdata/ironic", "testdata/thankyou"}},
+		{"good&down", []string{"testdata/good", "testdata/ironic", "testdata/thankyou"}},
 		{"good & down & ironic", []string{"testdata/ironic"}},
 		{"secret", nil},
 		{"secret | unsecret", nil},
